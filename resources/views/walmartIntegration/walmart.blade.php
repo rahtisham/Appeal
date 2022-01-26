@@ -9,8 +9,12 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-
-                <div class="col-md-9 card p-4">
+                <!-- /.col -->
+                <div class="col-md-1">
+                </div>
+                <!-- /.col -->
+                <!--end of col-sm-1-->
+                <div class="col-md-10 card p-4">
 
                     <div class="tab-pane " id="walmartsettings">
                         <form class="form-horizontal" method="post" action="{{ url('check') }}">
@@ -30,7 +34,6 @@
                                 </div>
                             </div>
 
-
                             <div class="form-group row">
                                 <label for="client_secret" class="col-sm-4 col-form-label">Client Secret</label>
                                 <div class="col-sm-8">
@@ -38,27 +41,22 @@
                                 </div>
                             </div>
 
-
-{{--                            <div class="form-group row">--}}
-{{--                                <label for="correlation_id" class="col-sm-4 col-form-label">Correlation ID</label>--}}
-{{--                                <div class="col-sm-8">--}}
-{{--                                    <input type="text" class="form-control" id="correlation_id" name="correlation_id" placeholder="Correlation ID" value="{{ @$walmart_settings[0]->correlation_id }}" required>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
                             <div class="form-group row">
-                                <div class="offset-sm-2 col-sm-10">
+                                <div class="offset-sm-2 col-sm-10" style="text-align: end !important;">
                                     <button type="submit" class="btn btn-danger">Submit</button>
                                 </div>
                             </div>
                         </form>
                     </div>
-
+                    <!--end of col-sm-10 -->
 
                 </div>
                 <!-- /.col -->
-                <div class="col-md-3">
+                <div class="col-md-1">
                 </div>
+                <!--end of col-sm-1-->
                 <!-- /.col -->
+
             </div>
             <!-- /.row -->
         </div><!-- /.container-fluid -->

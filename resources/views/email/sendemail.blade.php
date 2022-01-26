@@ -9,32 +9,35 @@
         </div>
         <table class="table table-borderless">
             <thead>
-            <tr>
-                <th scope="col">PRODUCT ID</th>
-                <td scope="col">{{ $detail['productID']  }}</td>
-            </tr>
+
             </thead>
             <tbody>
-            <tr>
-                <th scope="row">PRODUCT NAME</th>
-                <td>{{ $detail['productName']  }}</td>
-            </tr>
-            <tr>
-                <th scope="row">EMAIL</th>
-                <td>{{ $detail['userEmail']  }}</td>
-            </tr>
-            <tr>
-                <th scope="row">PUBLISHED STATUS</th>
-                <td colspan="2">{{ $detail['publishedStatus']  }}</td>
-            </tr>
-            <tr>
-                <th scope="row">REASON</th>
-                <td colspan="2">{{ $detail['reason']  }}</td>
-            </tr>
-            <tr>
-                <th scope="row">PRODUCT LINK</th>
-                <td colspan="2">{{ $detail['productLink']  }}</td>
-            </tr>
+               @foreach($detail as $check)
+                <tr>
+                    <th scope="col">PRODUCT ID</th>
+                    <td scope="col">{{ $check['productID']  }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">PRODUCT NAME</th>
+                    <td>{{ $check['productName']  }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">EMAIL</th>
+                    <td>{{ $check['userEmail']  }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">PUBLISHED STATUS</th>
+                    <td colspan="2">{{ $check['publishedStatus']  }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">REASON</th>
+                    <td colspan="2">{{ $check['reason']  }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">PRODUCT LINK</th>
+                    <td colspan="2">{{ $check['productLink']  }}</td>
+                </tr>
+                @endforeach
             </tbody>
         </table>
     </div><!--end of row-->
