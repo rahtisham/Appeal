@@ -29,11 +29,11 @@
                                                             <tbody>
                                                             <tr>
                                                                 <td>
-                                                                    <table align="center" border="0" cellpadding="0" cellspacing="0">
+                                                                    <table style="text-align: center" border="0" cellpadding="0" cellspacing="0">
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <img width="65" style="width: 100%; display: block; line-height: 0px; font-size: 0px; border: 0px;" src="/images/appealLogo.png">
+                                                                                <img width="65" style="width: 45%; line-height: 0px; font-size: 0px; border: 0px;" src="https://www.appeallab.com/wp-content/uploads/2021/08/cropped-logo-png.png">
                                                                             </td>
                                                                         </tr>
                                                                         </tbody>
@@ -50,7 +50,7 @@
                                                 </tr>
                                                 <!-- title -->
                                                 <tr>
-                                                    <td class="res-center" style="text-align: center; color: white; font-family: 'Raleway', Arial, Sans-serif; font-size: 26px; letter-spacing: 1.5px; word-break: break-word; font-weight: 800; padding-left: 1.5px;" data-color="M1 Title 1" data-size="M1 Title 1" data-max="36" data-min="16">
+                                                    <td class="res-center" style="text-align: center; color: white; font-family: 'Raleway', Arial, Sans-serif; font-size: 36px; letter-spacing: 1.5px; word-break: break-word; font-weight: 800; padding-left: 1.5px;" data-color="M1 Title 1" data-size="M1 Title 1" data-max="36" data-min="16">
                                                         EMAIL ALERT FROM APPEALLAB
                                                     </td>
                                                 </tr>
@@ -61,7 +61,7 @@
                                                 <!-- title -->
                                                 <tr>
                                                     <td class="res-center" style="text-align: center; color: white; font-family: 'Raleway', Arial, Sans-serif; font-size: 35px; letter-spacing: 3px; word-break: break-word; font-weight: 800; padding-left: 3px;" data-color="M1 Title 2" data-size="M1 Title 2" data-max="45" data-min="25">
-                                                        138
+{{--                                                        <a CLASS="btn btn-danger" target="_blank" href="#">PRODUCT LINK</a>--}}
                                                     </td>
                                                 </tr>
                                                 <!-- title end -->
@@ -80,7 +80,7 @@
                                                                         <tr>
                                                                             <td class="res-center" style="text-align: center;">
                                                                                 <a href="https://example.com" style="color: white; font-family: 'Nunito', Arial, Sans-serif; font-size: 16px; letter-spacing: 0.7px; text-decoration: none; word-break: break-word;" data-color="M1 Link 2" data-size="M1 Link 2" data-max="26" data-min="6">
-                                                                                    Support
+{{--                                                                                    Support--}}
                                                                                 </a>
                                                                             </td>
                                                                         </tr>
@@ -89,7 +89,7 @@
                                                                     </table>
                                                                 </td>
                                                                 <td style="padding: 0 12px; color: #798999;">
-                                                                    •
+{{--                                                                    •--}}
                                                                 </td>
                                                                 <td>
                                                                     <table align="center" border="0" cellpadding="0" cellspacing="0">
@@ -98,7 +98,7 @@
                                                                         <tr>
                                                                             <td class="res-center" style="text-align: center;">
                                                                                 <a href="https://example.com" style="color: white; font-family: 'Nunito', Arial, Sans-serif; font-size: 16px; letter-spacing: 0.7px; text-decoration: none; word-break: break-word;" data-color="M1 Link 3" data-size="M1 Link 3" data-max="26" data-min="6">
-                                                                                    Webpage
+{{--                                                                                    Webpage--}}
                                                                                 </a>
                                                                             </td>
                                                                         </tr>
@@ -107,7 +107,7 @@
                                                                     </table>
                                                                 </td>
                                                                 <td style="padding: 0 12px; color: #798999;">
-                                                                    •
+{{--                                                                    •--}}
                                                                 </td>
                                                                 <td>
                                                                     <table align="center" border="0" cellpadding="0" cellspacing="0">
@@ -116,7 +116,7 @@
                                                                         <tr>
                                                                             <td class="res-center" style="text-align: center;">
                                                                                 <a href="https://example.com" style="color: white; font-family: 'Nunito', Arial, Sans-serif; font-size: 16px; letter-spacing: 0.7px; text-decoration: none; word-break: break-word;" data-color="M1 Link 4" data-size="M1 Link 4" data-max="26" data-min="6">
-                                                                                    Contact
+{{--                                                                                    Contact--}}
                                                                                 </a>
                                                                             </td>
                                                                         </tr>
@@ -152,56 +152,40 @@
                                 <table bgcolor="white" width="750" align="center" class="margin-full ui-resizable" border="0" cellpadding="0" cellspacing="0" data-bgcolor="M2 Bgcolor 2">
                                     <tbody>
                                     <tr>
-                                        <td>
-                                            <table width="100%" align="center"  class="margin-pad" border="0" cellpadding="0" cellspacing="0">
-                                                <tbody>
+                                        <td><br><br>
+                                            <table class="table table-bordered">
+                                                <thead>
                                                 <tr>
-                                                    <td height="70" style="font-size:0px">&nbsp;</td>
-                                                </tr>
-                                                <!-- HEADING -->
-                                                <!-- subtitle -->
-                                                <tr>
-                                                    <td class="res-center" style="text-align: left; color: #506070; font-size: 16px; letter-spacing: 1px; word-break: break-word; font-weight: 400;" data-color="M2 Subtitle 1" data-size="M2 Subtitle 1" data-max="24" data-min="5">
-                                                        {{ $check['productID']  }}
+                                                    <th scope="col">SKU</th>
+                                                    <td style="text-align: left">
+                                                        {{ $check['productID'] }}
                                                     </td>
                                                 </tr>
-                                                <!-- subtitle end -->
                                                 <tr>
-                                                    <td height="13" style="font-size:0px">&nbsp;</td>
-                                                </tr>
-                                                <!-- title -->
-                                                <tr>
-                                                    <td class="res-center selected-element" style="text-align: left; font-weight: 700; color: #405060; font-size: 25px; letter-spacing: 0.7px; word-break: break-word" data-color="M2 Title 1" data-size="M2 Title 1" data-max="32" data-min="12" contenteditable="true">
-                                                        {{ $check['productName']  }}
+                                                    <th scope="col">STATUS</th>
+                                                    <td style="text-align: left">
+                                                        {{ $check['publishedStatus'] }}
                                                     </td>
                                                 </tr>
-                                                <!-- title end -->
                                                 <tr>
-                                                    <td height="15" style="font-size:0px">&nbsp;</td>
-                                                </tr>
-                                                <!-- paragraph -->
-                                                <tr>
-                                                    <td class="res-center" style="text-align: left; color: #607080; font-size: 16px; letter-spacing: 0.4px; line-height: 23px; word-break: break-word" data-color="M2 Paragraph 1" data-size="M2 Paragraph 1" data-max="26" data-min="6">
-                                                        {{ $check['reason']  }}
+                                                    <th scope="col">PRODUCT NAME</th>
+                                                    <td style="text-align: left">
+                                                        {{ $check['productName'] }}
                                                     </td>
                                                 </tr>
-                                                <!-- paragraph end -->
                                                 <tr>
-                                                    <td height="23" style="font-size:0px">&nbsp;</td>
-                                                </tr>
-                                                <!-- link -->
-                                                <tr>
-                                                    <td class="res-center" style="text-align: left;">
-                                                        <a class="btn btn-warning" href="{{ $check['productLink']  }}" style="letter-spacing: 0.7px; text-decoration: none; word-break: break-word;" data-color="M2 Link 1" data-size="M2 Link 1" data-max="26" data-min="6">
-                                                            LEARN MORE ABOUT US
-                                                        </a>
+                                                    <th scope="col">UNPUBLISHED REASON</th>
+                                                    <td style="text-align: left">
+                                                        {{ $check['reason'] }}
                                                     </td>
                                                 </tr>
-                                                <!-- link end -->
                                                 <tr>
-                                                    <td height="35" style="font-size:0px">&nbsp;</td>
+                                                    <th scope="col">PRODUCT TYPE</th>
+                                                    <td style="text-align: left">
+                                                        {{ $check['AlertType'] }}
+                                                    </td>
                                                 </tr>
-                                                </tbody>
+                                                </thead>
                                             </table>
                                         </td>
                                     </tr>

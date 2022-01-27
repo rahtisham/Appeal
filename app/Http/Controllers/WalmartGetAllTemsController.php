@@ -35,7 +35,7 @@ class WalmartGetAllTemsController extends Controller
 
         $token = Walmart::getToken($client_id , $secret);
         $token = $token['access_token'];  // Token generated
-        $total_records = 1000; // Total Record fetch from Walmart
+        $total_records = 2000; // Total Record fetch from Walmart
         $per_page = 100;  // 100 Records on per page
         $no_of_pages = $total_records/$per_page; // Total record divided into per page
         for ($i=0; $i<$no_of_pages; $i++){
@@ -126,6 +126,7 @@ class WalmartGetAllTemsController extends Controller
                             'productName' => $ipClaim['product_name'],
                             'publishedStatus' => $ipClaim['status'],
                             'reason' => $ipClaim['reason'],
+                            'AlertType' => $ipClaim['alert_type'],
                             'productLink' => "https://www.walmart.com/ip/".$ipClaim['sku'],
                             'userEmail' => $email
                         ];
@@ -141,6 +142,7 @@ class WalmartGetAllTemsController extends Controller
                             'productName' => $offensiveProduct['product_name'],
                             'publishedStatus' => $offensiveProduct['status'],
                             'reason' => $offensiveProduct['reason'],
+                            'AlertType' => $offensiveProduct['alert_type'],
                             'productLink' => "https://www.walmart.com/ip/".$offensiveProduct['sku'],
                             'userEmail' => $email
                         ];
