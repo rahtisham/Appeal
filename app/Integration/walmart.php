@@ -28,14 +28,13 @@ class Walmart{
                 "Content-Type: application/x-www-form-urlencoded",
             ),
         );
-        curl_setopt_array($ch,$options);
 
+        curl_setopt_array($ch,$options);
 
         $response = curl_exec($ch);
         $code = curl_getinfo($ch,CURLINFO_HTTP_CODE);
 
         curl_close($ch);
-
 
         if($code == 201 || $code == 200)
         {
@@ -51,15 +50,17 @@ class Walmart{
 
     public static function getItem($client_id , $secret)
     {
-
+        ini_set('max_execution_time', '500');
         $token = SELF::getToken($client_id , $secret);
         $token = $token['access_token'];
-        $total_records = 1000;
-        $per_page = 50;
-        $no_of_pages = $total_records/$per_page;
-        $offset = 0;
+//        $total_records = 5000;
+//        $per_page = 100;
+//        $no_of_pages = $total_records/$per_page;
+////        $offset = 0;
+//
+//        for ($i=0; $i<=$no_of_pages; $i++){
 
-        for ($i=0; $i<=$no_of_pages; $i++){
+//            $offset = $i * $per_page;
             $url = "https://marketplace.walmartapis.com/v3/items?limit=200";
             $requestID = uniqid();
             $authorization = base64_encode($client_id.":".$secret);
@@ -94,7 +95,7 @@ class Walmart{
 
             curl_close($curl);
 
-        }
+//        }
         return  $token = json_decode($response,true);
 
 

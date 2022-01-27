@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\WalmartGetAllTemsController;
+use App\Http\Controllers\testingApiController;
+use App\Http\Controllers\Walmart\WalmartAlertEmailController;
 use App\User;
 
 /*
@@ -23,14 +25,34 @@ Route::get('dashboard', 'UserController@dashboard')->middleware('auth');
 });*/
 //Auth::routes(['verify' => true]);
 
-Route::get('/', 'HomeController@index');
-Route::get('/dashboard_first', function(){
-    return view('front_dashboard');
-});
+//Route::get('/', 'HomeController@index');
+//Route::get('/dashboard_first', function(){
+//    return view('front_dashboard');
+//});
+
+//Route::group(['middleware' => 'auth'] , function(){
+
 Auth::routes(['verify' => true]);
 
-Route::get('/product' , [WalmartGetAllTemsController::class , 'index'])->name('dashboard.index');
-Route::post('/check' , [WalmartGetAllTemsController::class , 'checkProduct'])->name('dashboard.check');
+    Route::prefix('dashboard')->group(function () {
+
+        Route::get('/product' , [WalmartGetAllTemsController::class , 'index'])->name('dashboard.index');
+        Route::post('/check' , [WalmartGetAllTemsController::class , 'checkProduct'])->name('dashboard.check');
+        Route::get('/emailtemplate' , [WalmartGetAllTemsController::class , 'emailTemplate'])->name('dashboard.check');
+        Route::get('/testing' , [testingApiController::class , 'index'])->name('dashboard.testing');
+        Route::post('/working' , [testingApiController::class , 'testing'])->name('dashboard.index');
+
+    });
+
+    Route::prefix('dashboard')->group(function () {
+
+        Route::get('/walmart_email_alert' , [WalmartAlertEmailController::class , 'index'])->name('dashboard.walmart_email_alert');
+        Route::get('/email_template/{id}' , [WalmartAlertEmailController::class , 'email_template'])->name('dashboard.email_template');
+
+    });
+
+
+
 
 ## Subscription start
 Route::get('/subscription','SubscriptionController@index')->name('subscription');
@@ -188,6 +210,10 @@ Route::get('template','RulesController@template')->name('template');
 Route::get('authorization' , [PaymentController::class , 'viewAuthorization'])->name('authorization');
 Route::get('pay' , [PaymentController::class , 'pay'])->name('pay');
 Route::post('/dopay/online' , [PaymentController::class , 'handleonlinepay'])->name('dopay.online');
+
+//});
+
+//********** End of middleware */
 
 //Route::get('userchangepassword', function() {
 //    $user = User::where('email', 'seller@gmail.com')->first();

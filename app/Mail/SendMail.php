@@ -32,7 +32,7 @@ class SendMail extends Mailable
     {
 
 //      return $this->subject('Maintan VTR');
-        return $this->subject('Mail test from appealLab')->view('email.sendemail');
+        return $this->subject('Email From AppealLab')->view('email.sendemail');
         //return $this->view('view.name');
     }
 }

@@ -16,8 +16,10 @@
                 <!--end of col-sm-1-->
                 <div class="col-md-10 card p-4">
 
+                    <h1>Walmart Testing Api Page</h1>
+
                     <div class="tab-pane " id="walmartsettings">
-                        <form class="form-horizontal" method="post" action="{{ url('dashboard/check') }}">
+                        <form class="form-horizontal" method="post" action="{{ url('dashboard/working') }}">
                             @csrf
 
                             <div class="form-group row">

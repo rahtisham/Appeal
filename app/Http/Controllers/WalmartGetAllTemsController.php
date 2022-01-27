@@ -20,9 +20,9 @@ class WalmartGetAllTemsController extends Controller
 
     public function checkProduct(Request $request)
     {
-         $client_id = $request->get('clientID');
-         $secret = $request->get('clientSecretID');
-
+        ini_set('max_execution_time', '500');
+        $client_id = $request->get('clientID');
+        $secret = $request->get('clientSecretID');
 
         $this->validate($request ,[
 
@@ -31,21 +31,19 @@ class WalmartGetAllTemsController extends Controller
             'clientSecretID' => 'required',
 
         ]);
-
-
+        //End of validation
 
         $token = Walmart::getToken($client_id , $secret);
-        $token = $token['access_token'];
-        $total_records = 1000;
-        $per_page = 200;
-        $no_of_pages = $total_records/$per_page;
-        $offset = 0;
-        $res = [];
+        $token = $token['access_token'];  // Token generated
+        $total_records = 1000; // Total Record fetch from Walmart
+        $per_page = 100;  // 100 Records on per page
+        $no_of_pages = $total_records/$per_page; // Total record divided into per page
         for ($i=0; $i<$no_of_pages; $i++){
+
+            $offset = $i * $per_page;
             $url = "https://marketplace.walmartapis.com/v3/items?offset=".$offset."&limit=".$per_page;
             $requestID = uniqid();
             $authorization = base64_encode($client_id.":".$secret);
-
 
             $curl = curl_init();
 
@@ -67,6 +65,7 @@ class WalmartGetAllTemsController extends Controller
                     'Content-Type: application/json',
                     'Cookie: TS01f4281b=0130aff232afca32ba07d065849e80b32e6ebaf11747c58191b2b4c9d5dd53a042f7d890988bf797d7007bddb746c3b59d5ee859d0'
                 ),
+
                 CURLOPT_HTTPGET => true,
             );
 
@@ -75,8 +74,9 @@ class WalmartGetAllTemsController extends Controller
             $code = curl_getinfo($curl,CURLINFO_HTTP_CODE);
 
             curl_close($curl);
+
             $response = json_decode($response,true);
-//            return $response;
+
             foreach ($response['ItemResponse'] as $items) {
 
                 $unpublishedReasons = '';
@@ -105,31 +105,17 @@ class WalmartGetAllTemsController extends Controller
                     ]);
                 }
 
-//                if($items['publishedStatus'] === "UNPUBLISHED") {
-//
-//                    $walmartAlerts = WalmartItemAlert::create([
-//                        'sku' => $items['sku'],
-//                        'product_name' => $items['productName'],
-//                        'reason' => $unpublishedReasons,
-//                        'alert_type' => $alert_type,
-//                        'status' => $items['publishedStatus'],
-//                        'product_url' => $items['sku'],
-//                    ]);
-//                }
-
             }
             //End loop
-
-          $offset ++;
-
         }
-//        return  $response = $res;
-
+        // End of for loop
 
         $walmartData = WalmartItemAlert::all()->groupBy('alert_type');
+        // Get data from DB to send email
 
         $user = User::where('id' , '=' , '28')->get()->first();
         $email = $user->email;
+        // match condition to unique user
 
         if (!empty($email)) {
                 if(isset($walmartData['IP Claim'])  && count($walmartData['IP Claim']) > 0){
@@ -146,6 +132,7 @@ class WalmartGetAllTemsController extends Controller
                     }
                     Mail::to($email)->send(new SendMail($detail));
                 }
+                // IP Claim condition
                 if(count($walmartData['Offensive Product']) > 0){
                     $detail = [];
                     foreach ($walmartData['Offensive Product'] as $offensiveProduct) {
@@ -160,11 +147,17 @@ class WalmartGetAllTemsController extends Controller
                     }
                     Mail::to($email)->send(new SendMail($detail));
                 }
-
+                // Offensive Product
          }
-
+//        // Email is here
 
     }
     //End function
 
+    function emailTemplate()
+    {
+        return view('email.sendemail');
+    }
+
 }
+// End of WalmartGetAllTemsController class
