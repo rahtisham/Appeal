@@ -16,6 +16,7 @@ class WalmartGetAllTemsController extends Controller
     public function index()
     {
         return view('walmartIntegration.walmart');
+//        This is new changes to check rep
     }
 
     public function checkProduct(Request $request)
