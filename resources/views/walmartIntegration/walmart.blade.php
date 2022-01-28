@@ -8,6 +8,7 @@
 
     <section class="content">
         <div class="container-fluid">
+            <h1 style="text-align: center">Walmart Items</h1><br><br>
             <div class="row">
                 <!-- /.col -->
                 <div class="col-md-1">

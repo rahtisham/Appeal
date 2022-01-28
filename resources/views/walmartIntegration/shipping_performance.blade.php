@@ -8,7 +8,7 @@
 
     <section class="content">
         <div class="container-fluid">
-            <h1 style="text-align: center">Walmart API Testing</h1><br><br>
+            <h1 style="text-align: center">Shipping Performance</h1><br><br>
             <div class="row">
                 <!-- /.col -->
                 <div class="col-md-1">
@@ -17,9 +17,8 @@
                 <!--end of col-sm-1-->
                 <div class="col-md-10 card p-4">
 
-
                     <div class="tab-pane " id="walmartsettings">
-                        <form class="form-horizontal" method="post" action="{{ url('dashboard/working') }}">
+                        <form class="form-horizontal" method="post" action="{{ url('dashboard/shipping_performance_integration') }}">
                             @csrf
 
                             <div class="form-group row">

@@ -5,6 +5,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\WalmartGetAllTemsController;
 use App\Http\Controllers\testingApiController;
 use App\Http\Controllers\Walmart\WalmartAlertEmailController;
+use App\Http\Controllers\Walmart\ShippingPerformanceController;
 use App\User;
 
 /*
@@ -36,9 +37,14 @@ Auth::routes(['verify' => true]);
 
     Route::prefix('dashboard')->group(function () {
 
-        Route::get('/product' , [WalmartGetAllTemsController::class , 'index'])->name('dashboard.index');
+        Route::get('/walmart_items' , [WalmartGetAllTemsController::class , 'index'])->name('dashboard.index');
         Route::post('/check' , [WalmartGetAllTemsController::class , 'checkProduct'])->name('dashboard.check');
         Route::get('/emailtemplate' , [WalmartGetAllTemsController::class , 'emailTemplate'])->name('dashboard.check');
+
+    });
+
+    Route::prefix('dashboard')->group(function () {
+
         Route::get('/testing' , [testingApiController::class , 'index'])->name('dashboard.testing');
         Route::post('/working' , [testingApiController::class , 'testing'])->name('dashboard.index');
 
@@ -48,6 +54,13 @@ Auth::routes(['verify' => true]);
 
         Route::get('/walmart_email_alert' , [WalmartAlertEmailController::class , 'index'])->name('dashboard.walmart_email_alert');
         Route::get('/email_template/{id}' , [WalmartAlertEmailController::class , 'email_template'])->name('dashboard.email_template');
+
+    });
+
+    Route::prefix('dashboard')->group(function () {
+
+        Route::get('/shipping_performance' , [ShippingPerformanceController::class , 'index'])->name('dashboard.index');
+        Route::post('/shipping_performance_integration' , [ShippingPerformanceController::class , 'ShippingPerformance'])->name('dashboard.ShippingPerformance');
 
     });
 

@@ -61,7 +61,7 @@ class Walmart{
 //        for ($i=0; $i<=$no_of_pages; $i++){
 
 //            $offset = $i * $per_page;
-            $url = "https://marketplace.walmartapis.com/v3/items?limit=200";
+            $url = "https://marketplace.walmartapis.com/v3/orders";
             $requestID = uniqid();
             $authorization = base64_encode($client_id.":".$secret);
 
