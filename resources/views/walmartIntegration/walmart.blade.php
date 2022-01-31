@@ -24,21 +24,21 @@
                             <div class="form-group row">
                                 <label for="walmart_service_name" class="col-sm-4 col-form-label">Walmart Service Name</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="walmart_service_name" name="clientName" placeholder="Walmart Service Name" value="{{ @$walmart_settings[0]->walmart_service_name }}" required>
+                                    <input type="text" class="form-control" value="Muhammad Ahtisham" id="walmart_service_name" name="clientName" placeholder="Walmart Service Name" value="{{ @$walmart_settings[0]->walmart_service_name }}" required>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label for="client_id" class="col-sm-4 col-form-label">Client Id</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="client_id" name="clientID" placeholder="Client Id" value="{{ @$walmart_settings[0]->client_id }}" required>
+                                    <input type="text" class="form-control" value="3db5b332-a208-4dec-bafe-153f7c026e78" id="client_id" name="clientID" placeholder="Client Id" value="{{ @$walmart_settings[0]->client_id }}" required>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label for="client_secret" class="col-sm-4 col-form-label">Client Secret</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="client_secret" name="clientSecretID" placeholder="Client Secret" value="{{ @$walmart_settings[0]->client_secret }}" required>
+                                    <input type="text" class="form-control" value="Up_Q9FXoQaFO3EjUePvpCKoSDbW5XlHjBmU1qeSwTEpH0inL37aSuRiZ7HvHOT9GEfaxM7-I_rzf7t54OVd-HA" id="client_secret" name="clientSecretID" placeholder="Client Secret" value="{{ @$walmart_settings[0]->client_secret }}" required>
                                 </div>
                             </div>
 

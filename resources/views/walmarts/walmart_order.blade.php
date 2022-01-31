@@ -16,24 +16,23 @@
                             <div class="alert {{ Session::get('alert-class') }}">
                                 {{ Session::get('message') }}
                             </div>
-                    @endif
-                    <div class="card-header">
-                    <a class='btn btn-sm btn-primary float-right' href="{{route('dashboard.walmart_items')}}">Walmart Email Alert</a>
-                    </div>
+                        @endif
+                        <div class="card-header">
+                            <a class='btn btn-sm btn-primary float-right' href="{{route('dashboard.shipping_performance')}}">Walmart Order For Shipping Performance</a>
+                        </div>
                         <!-- /.card-header -->
                         <div class="card-body">
                             <table id="example2" class="table table-bordered table-hover">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Sku</th>
-                                    <th>Product Name</th>
-                                    <th>Reason</th>
-                                    <th>Status</th>
-                                    <th>Alert Type</th>
-                                    <th>created_at</th>
-                                    <th>updated_at</th>
-                                    <th>View Email</th>
+                                    <th>PurchaseID</th>
+                                    <th>CustomerID</th>
+                                    <th>Order Date</th>
+                                    <th>Delivery Date</th>
+                                    <th>Ship Date</th>
+                                    <th>Country</th>
+                                    <th>Ship Program Type</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -42,19 +41,18 @@
                                     $index=1;
                                 @endphp
 
-                                @if(count($walmart_alert_email)>0)
-                                    @foreach($walmart_alert_email as $all_order)
+                                @if(count($walmart_orders)>0)
+                                    @foreach($walmart_orders as $walmart_orders)
 
                                         <tr>
                                             <td><strong>{{ $index }}</strong></td>
-                                            <td>{{ $all_order['sku'] }}</td>
-                                            <td>{{ $all_order['product_name'] }}</td>
-                                            <td>{{ $all_order['reason'] }}</td>
-                                            <td>{{ $all_order['status'] }}</td>
-                                            <td>{{ $all_order['alert_type'] }}</td>
-                                            <td>{{ $all_order['created_at'] }}</td>
-                                            <td>{{ $all_order['updated_at'] }}</td>
-                                            <td><a class="btn btn-primary" href="{{ route('dashboard.email_template' , ['id' => $all_order['sku']]) }}">Email</a> </td>
+                                            <td>{{ $walmart_orders['purchaseOrderId'] }}</td>
+                                            <td>{{ $walmart_orders['customerOrderId'] }}</td>
+                                            <td>{{ $walmart_orders['order_date'] }}</td>
+                                            <td>{{ $walmart_orders['estimatedDeliveryDate'] }}</td>
+                                            <td>{{ $walmart_orders['estimatedShipDate'] }}</td>
+                                            <td>{{ $walmart_orders['country'] }}</td>
+                                            <td>{{ $walmart_orders['shippingProgramType'] }}</td>
 
                                         </tr>
 
