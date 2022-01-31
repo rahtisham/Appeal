@@ -72,10 +72,18 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link {{ request()->is('walmartOrders') ? 'active' : '' }}">
+                        <a href="{{ route('dashboard.walmart_order') }}" class="nav-link {{ request()->is('walmartOrders') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-shopping-cart"></i>
                             <p>
                                 Walmart Orders
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('dashboard.order_status') }}" class="nav-link {{ request()->is('walmartOrders') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-shopping-cart"></i>
+                            <p>
+                                Walmart Orders Status
                             </p>
                         </a>
                     </li>

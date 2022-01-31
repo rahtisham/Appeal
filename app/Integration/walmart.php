@@ -48,20 +48,22 @@ class Walmart{
 
     }
 
-    public static function getItem($client_id , $secret)
+    public static function getItem($client_id , $secret , $order_purchade_id)
     {
         ini_set('max_execution_time', '500');
         $token = SELF::getToken($client_id , $secret);
         $token = $token['access_token'];
-//        $total_records = 5000;
-//        $per_page = 100;
-//        $no_of_pages = $total_records/$per_page;
-////        $offset = 0;
-//
-//        for ($i=0; $i<=$no_of_pages; $i++){
 
-//            $offset = $i * $per_page;
-            $url = "https://marketplace.walmartapis.com/v3/items?limit=200";
+//        $url = "https://marketplace.walmartapis.com/v3/items";  // Walmart Items
+
+//        $url = "https://marketplace.walmartapis.com/v3/orders?limit=200"; // Walmart Orders
+//        if($createdStartDate)
+//        {
+//            $url = "https://marketplace.walmartapis.com/v3/orders?createdStartDate=".$createdStartDate; // Walmart Order for Current date
+//        }
+
+        $url = "https://marketplace.walmartapis.com/v3/orders?purchaseOrderId=".$order_purchade_id;
+
             $requestID = uniqid();
             $authorization = base64_encode($client_id.":".$secret);
 
@@ -95,7 +97,6 @@ class Walmart{
 
             curl_close($curl);
 
-//        }
         return  $token = json_decode($response,true);
 
 
