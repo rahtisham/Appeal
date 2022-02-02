@@ -75,7 +75,8 @@ class WalmartGetAllTemsController extends Controller
 
         $response = json_decode($response,true);
 
-        $total_records = 1000; // Total Record fetch from Walmart API
+        $total_records = $response['totalItems']; // Total Record fetch from Walmart API
+//        $total_records = 1000; // Total Record fetch from Walmart API
         $per_page = Config::get('constants.walmart.per_page');  // 100 Records on per page
         $no_of_pages = $total_records/$per_page; // Total record divided into per page
 
@@ -131,14 +132,26 @@ class WalmartGetAllTemsController extends Controller
                         }
 
                         $exp = explode(" " , $unpublishedReasons);
-                        $alert_type = Config::get('constants.walmart.offensive_product');
+                        $alert_type = '';
                         if(in_array("intellectual" , $exp))
                         {
                             $alert_type = Config::get('constants.walmart.ip_claim');
                         }
-
+                        if(in_array("compliance" , $exp))
+                        {
+                            $alert_type = 'regulatory_compliance';
+                        }
+                        if(in_array("partnered" , $exp))
+                        {
+                            $alert_type = 'brand_partnership_violation';
+                        }
+                        if(in_array("Safety" , $exp))
+                        {
+                            $alert_type = 'offensive_product';
+                        }
                         $walmartAlerts = WalmartItemAlert::create([
                             'sku' => $items['sku'] ? $items['sku'] : '',
+//                          'wpid' => $items['wpid'] ? $items['wpid'] : '',
                             'product_name' => isset($items['productName']) ? $items['productName'] : '',
                             'reason' => $unpublishedReasons,
                             'alert_type' => $alert_type,
@@ -154,7 +167,7 @@ class WalmartGetAllTemsController extends Controller
 
         }
         // End of for loop
-        // return 'Data inserted';
+
         $walmartData = WalmartItemAlert::all()->groupBy('alert_type');
         // Get data from DB to send email
 
@@ -180,7 +193,7 @@ class WalmartGetAllTemsController extends Controller
             }
             // IP Claim condition
 
-            if(count($walmartData['offensive_product']) > 0){
+            if(isset($walmartData['offensive_product'])  && count($walmartData['offensive_product']) > 0){
                 $detail = [];
                 foreach ($walmartData['offensive_product'] as $offensiveProduct) {
                     $detail[] = [
@@ -197,8 +210,45 @@ class WalmartGetAllTemsController extends Controller
                 Mail::to($email)->send(new SendMail($detail));
             }
             // Offensive Product
+
+            if(isset($walmartData['regulatory_compliance'])  && count($walmartData['regulatory_compliance']) > 0){
+                $detail = [];
+                foreach ($walmartData['regulatory_compliance'] as $regulatoryCompliance) {
+                    $detail[] = [
+                        'productID' => $regulatoryCompliance['sku'],
+                        'productName' => $regulatoryCompliance['product_name'],
+                        'publishedStatus' => $regulatoryCompliance['status'],
+                        'reason' => $regulatoryCompliance['reason'],
+                        'AlertType' => $regulatoryCompliance['alert_type'] ? 'Regulatory Compliance Alert' : '',
+                        'productLink' => "https://www.walmart.com/ip/".$regulatoryCompliance['sku'],
+                        'userEmail' => $email
+                    ];
+                }
+
+                Mail::to($email)->send(new SendMail($detail));
+            }
+            // regulatory compliance Product
+
+            if(isset($walmartData['brand_partnership_violation'])  && count($walmartData['brand_partnership_violation']) > 0){
+                $detail = [];
+                foreach ($walmartData['brand_partnership_violation'] as $brandPartnershipViolation) {
+                    $detail[] = [
+                        'productID' => $brandPartnershipViolation['sku'],
+                        'productName' => $brandPartnershipViolation['product_name'],
+                        'publishedStatus' => $brandPartnershipViolation['status'],
+                        'reason' => $brandPartnershipViolation['reason'],
+                        'AlertType' => $brandPartnershipViolation['alert_type'] ? 'Walmart Brand Partnership Violation' : '',
+                        'productLink' => "https://www.walmart.com/ip/".$brandPartnershipViolation['sku'],
+                        'userEmail' => $email
+                    ];
+                }
+
+                Mail::to($email)->send(new SendMail($detail));
+            }
+            // brand Partnership Violation Product
+
         }
-//        // Email is here
+        // Email is here
 
     }
     //End function
