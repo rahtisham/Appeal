@@ -54,15 +54,17 @@ class Walmart{
         $token = SELF::getToken($client_id , $secret);
         $token = $token['access_token'];
 
-//        $url = "https://marketplace.walmartapis.com/v3/items";  // Walmart Items
 
 //        $url = "https://marketplace.walmartapis.com/v3/orders?limit=200"; // Walmart Orders
 //        if($createdStartDate)
 //        {
-//            $url = "https://marketplace.walmartapis.com/v3/orders?createdStartDate=".$createdStartDate; // Walmart Order for Current date
+//             $url = "https://marketplace.walmartapis.com/v3/orders?createdStartDate=".$createdStartDate; // Walmart Order for Current date
 //        }
 
-        $url = "https://marketplace.walmartapis.com/v3/orders?purchaseOrderId=".$order_purchade_id;
+          $url = "https://marketplace.walmartapis.com/v3/orders?purchaseOrderId=".$order_purchade_id; // Walmart An Order
+
+
+
 
             $requestID = uniqid();
             $authorization = base64_encode($client_id.":".$secret);

@@ -39,12 +39,12 @@ class ShippingPerformanceController extends Controller
         if ($walmartOrderDetails > 0) {
 
             $data_last = walmart_order_details::latest()->first();
-            $createdStartDate = $data_last['order_date'];
-            $createdStartDate = Carbon::parse($createdStartDate)->addDay();
-
+            $createdStartDates = $data_last['order_date'];
+            $createdStartDate = Carbon::parse($createdStartDates)->addDay();
+//            $createdStartDate = date('Y-m-d' , time());
             $response[] = Walmart::getItem($client_id, $secret ,$createdStartDate);
 
-            if ($response[0] !="") {
+            if ($response[0]) {
 
                 foreach ($response[0]['list']['elements']['order'] as $res) {
 
@@ -103,7 +103,6 @@ class ShippingPerformanceController extends Controller
 //
 //                }
                 // End of foreach loop
-
             }
             // End of else condition
         }
@@ -158,22 +157,37 @@ class ShippingPerformanceController extends Controller
         $secret = $request->get('clientSecretID');
 
         $walmart_order = walmart_order_details::all();
-         $order_purchade_id = $walmart_order[0]['purchaseOrderId'];
-        $response[] = Walmart::getItem($client_id, $secret ,$order_purchade_id);
-        return $response;
+        foreach ($walmart_order as $order_status_databaseTable)
+        {
+//            $order_status_databaseTable['purchaseOrderId'];
+//            $status = $order_status_databaseTable['status'];
+//            $purchaseID = $order_status_databaseTable['purchaseOrderId'];
 
-//        if(!empty($walmart_order))
-//        {
-//            foreach ($walmart_order as $order_status_check)
-//            {
-//                echo $order_purchade_id =  $order_status_check['purchaseOrderId'];
-//                $response[] = Walmart::getItem($client_id, $secret ,$order_purchade_id);
-//                // echo $response."<br>";
-//            }
-//        }
+            $order_purchade_id = "7870331028520";
 
-//        $response[] = Walmart::getItem($client_id, $secret ,$createdStartDate);
-    }
+            $response[] = Walmart::getItem($client_id, $secret ,$order_purchade_id);
+
+            if(!empty($response)) {
+
+                $order_status_check = $response[0]['list']['elements']['order'][0]['orderLines']['orderLine'][0]['orderLineStatuses']['orderLineStatus'][0]['status'];
+                $purchaseID = $response[0]['list']['elements']['order'][0]['purchaseOrderId'];
+
+                if (!empty($purchaseID)) {
+                    $UpdateDetails = walmart_order_details::where('purchaseOrderId', '=', $purchaseID)->first();
+                    $UpdateDetails->status = "Delivered";
+                    $UpdateDetails->save();
+                    return "Order Status Updated";
+                }
+            }
+
+        }
+        // End of foreach loop
+     }
+    // End of order_status_check
+
+
+
+
 
     }
     // End of function Class
