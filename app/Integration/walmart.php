@@ -39,7 +39,7 @@ class Walmart{
         if($code == 201 || $code == 200)
         {
             $token = json_decode($response,true);
-            return $token;
+            return $token['access_token'];
         }
         else{
             return 'invalid_user';
@@ -104,6 +104,49 @@ class Walmart{
 
     }
 
+
+    public static function getItemTotal($client_id , $secret , $token)
+    {
+        // Item api for gettig the total_records
+        $url = "https://marketplace.walmartapis.com/v3/items?limit=2";
+        $requestID = uniqid();
+        $authorization = base64_encode($client_id.":".$secret);
+
+        $curl = curl_init();
+
+        $options = array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'WM_SVC.NAME: Walmart Marketplace',
+                'Authorization: Basic '.$authorization,
+                'WM_QOS.CORRELATION_ID: '.$requestID,
+                'WM_SEC.ACCESS_TOKEN: '.$token,
+                'Accept: application/json',
+                'Content-Type: application/json',
+                'Cookie: TS01f4281b=0130aff232afca32ba07d065849e80b32e6ebaf11747c58191b2b4c9d5dd53a042f7d890988bf797d7007bddb746c3b59d5ee859d0'
+            ),
+
+            CURLOPT_HTTPGET => true,
+        );
+
+        curl_setopt_array($curl,$options);
+        $response = curl_exec($curl);
+        $code = curl_getinfo($curl,CURLINFO_HTTP_CODE);
+
+        curl_close($curl);
+
+        $response = json_decode($response,true);
+
+        return $response['totalItems']; 
+
+    }
 
 
 }

@@ -35,52 +35,15 @@ class WalmartGetAllTemsController extends Controller
         ]);
         //End of validation
 
-        $token = Walmart::getToken($client_id , $secret);
-        $token = $token['access_token'];  // Token generated
+        $token = Walmart::getToken($client_id , $secret); // Token generated
 
-        // Item api for gettig the total_records
-        $url = "https://marketplace.walmartapis.com/v3/items?limit=2";
-        $requestID = uniqid();
-        $authorization = base64_encode($client_id.":".$secret);
+        $total_records = Walmart::getItemTotal($client_id , $secret, $token); // Token generated
 
-        $curl = curl_init();
+        if($total_records > 0){
+            $per_page = Config::get('constants.walmart.per_page');  // 100 Records on per page
+            $no_of_pages = $total_records/$per_page; // Total record divided into per page
 
-        $options = array(
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-            CURLOPT_HTTPHEADER => array(
-                'WM_SVC.NAME: Walmart Marketplace',
-                'Authorization: Basic '.$authorization,
-                'WM_QOS.CORRELATION_ID: '.$requestID,
-                'WM_SEC.ACCESS_TOKEN: '.$token,
-                'Accept: application/json',
-                'Content-Type: application/json',
-                'Cookie: TS01f4281b=0130aff232afca32ba07d065849e80b32e6ebaf11747c58191b2b4c9d5dd53a042f7d890988bf797d7007bddb746c3b59d5ee859d0'
-            ),
-
-            CURLOPT_HTTPGET => true,
-        );
-
-        curl_setopt_array($curl,$options);
-        $response = curl_exec($curl);
-        $code = curl_getinfo($curl,CURLINFO_HTTP_CODE);
-
-        curl_close($curl);
-
-        $response = json_decode($response,true);
-
-        $total_records = $response['totalItems']; // Total Record fetch from Walmart API
-//        $total_records = 1000; // Total Record fetch from Walmart API
-        $per_page = Config::get('constants.walmart.per_page');  // 100 Records on per page
-        $no_of_pages = $total_records/$per_page; // Total record divided into per page
-
-        for ($i=0; $i<$no_of_pages; $i++){
+            for ($i=0; $i<$no_of_pages; $i++){
 
             $offset = $i * $per_page;
             $url = "https://marketplace.walmartapis.com/v3/items?offset=".$offset."&limit=".$per_page;
@@ -122,7 +85,7 @@ class WalmartGetAllTemsController extends Controller
 
             if(count($res) > 0){
                 foreach ($response['ItemResponse'] as $items) {
-                    if($items['publishedStatus'] === "SYSTEM_PROBLEM" || $items['publishedStatus'] === "UNPUBLISHED") {
+                    if($items['publishedStatus'] === "SYSTEM_PROBLEM") {
 
                         $unpublishedReasons = '';
                         if(array_key_exists('unpublishedReasons' ,$items))
@@ -249,6 +212,7 @@ class WalmartGetAllTemsController extends Controller
 
         }
         // Email is here
+        }
 
     }
     //End function
