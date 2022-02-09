@@ -17,6 +17,12 @@
                 <!--end of col-sm-1-->
                 <div class="col-md-10 card p-4">
 
+                    @if(\Session::has('success'))
+                        <div class="alert alert-success">
+                            <b>{{ \Session::get('success') }}</b>
+                        </div>
+                    @endif
+
                     <div class="tab-pane " id="walmartsettings">
                         <form class="form-horizontal" method="post" action="{{ url('dashboard/shipping_performance_integration') }}">
                             @csrf

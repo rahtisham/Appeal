@@ -33,7 +33,10 @@ class testingApiController extends Controller
 
         ]);
 
-        $response[] = Walmart::getItem($client_id , $secret);
+        $token = Walmart::getToken($client_id, $secret);
+        $token = $token['access_token'];  // Token generated
+
+        $response[] = Walmart::getItemTesting($client_id , $secret , $token);
         return $response;
         // Walmart taken generate with Original data
         $authorization = base64_encode($client_id.":".$secret);

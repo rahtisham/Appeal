@@ -7,6 +7,7 @@ use App\Http\Controllers\testingApiController;
 use App\Http\Controllers\Walmart\WalmartAlertEmailController;
 use App\Http\Controllers\Walmart\ShippingPerformanceController;
 use App\Http\Controllers\Walmart\WalmartOrdersController;
+use App\Http\Controllers\Walmart\RatingReviewController;
 use App\User;
 
 /*
@@ -31,10 +32,8 @@ Route::get('dashboard', 'UserController@dashboard')->middleware('auth');
 //Route::get('/dashboard_first', function(){
 //    return view('front_dashboard');
 //});
-
-//Route::group(['middleware' => 'auth'] , function(){
-
 Auth::routes(['verify' => true]);
+Route::group(['middleware' => 'auth'] , function(){
 
     Route::prefix('dashboard')->group(function () {
 
@@ -70,6 +69,13 @@ Auth::routes(['verify' => true]);
 
         Route::get('/order_status' , [WalmartOrdersController::class , 'order_status'])->name('dashboard.order_status');
         Route::post('/order_status_check' , [ShippingPerformanceController::class , 'order_status_check'])->name('dashboard.order_status_check');
+
+    });
+
+    Route::prefix('dashboard')->group(function () {
+
+        Route::get('/rating_review' , [RatingReviewController::class , 'index'])->name('dashboard.rating_review');
+        Route::post('/rating_review_check' , [RatingReviewController::class , 'rating_review_check'])->name('dashboard.rating_review_check');
 
     });
 
@@ -123,16 +129,6 @@ Route::post('/AmazonSettingsUpdate', 'UsersController@AmazonSettingsUpdate')->na
 ## Settings page route end
 
 
-
-//Route::get('/sign-up','SignupController@index')->name('sign-up');
-Route::get('register','SignupController@index')->name('register_get');
-Route::post('register','SignupController@postRegister')->name('user_register');
-
-
-Route::get('forget-password', 'ForgotPasswordController@showForgetPasswordForm')->name('forget.password.get');
-Route::post('forget-password', 'ForgotPasswordController@submitForgetPasswordForm')->name('forget.password.post');
-Route::get('reset-password/{token}', 'ForgotPasswordController@showResetPasswordForm')->name('reset.password.get');
-Route::post('reset-password', 'ForgotPasswordController@submitResetPasswordForm')->name('reset.password.post'); 
 
 
 
@@ -233,7 +229,34 @@ Route::get('authorization' , [PaymentController::class , 'viewAuthorization'])->
 Route::get('pay' , [PaymentController::class , 'pay'])->name('pay');
 Route::post('/dopay/online' , [PaymentController::class , 'handleonlinepay'])->name('dopay.online');
 
-//});
+});
+//End of Middleware
+
+//Route::get('/sign-up','SignupController@index')->name('sign-up');
+Route::get('register','SignupController@index')->name('register_get');
+Route::post('registers','SignupController@postRegister')->name('user_register');
+
+
+Route::get('forget-password', 'ForgotPasswordController@showForgetPasswordForm')->name('forget.password.get');
+Route::post('forget-password', 'ForgotPasswordController@submitForgetPasswordForm')->name('forget.password.post');
+Route::get('reset-password/{token}', 'ForgotPasswordController@showResetPasswordForm')->name('reset.password.get');
+Route::post('reset-password', 'ForgotPasswordController@submitResetPasswordForm')->name('reset.password.post');
+
+
+Route::get('/test', function(){
+
+    $estimated_shipdate = strtotime('2022-02-09');
+    $actual_shipdate = strtotime('2022-02-07');
+
+    if($estimated_shipdate <= $actual_shipdate){
+        return 'true';
+    }else{
+        return 'false';
+    }
+
+
+});
+
 
 //********** End of middleware */
 

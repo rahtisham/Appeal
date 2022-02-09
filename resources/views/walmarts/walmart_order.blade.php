@@ -1,7 +1,7 @@
 <!-- Extends template page -->
 @extends('app')
 
-@section('title', 'Walmart Order List')
+@section('title', 'Walmart Order Lists')
 
 <!-- Specify content -->
 @section('content')

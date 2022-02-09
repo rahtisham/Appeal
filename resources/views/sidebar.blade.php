@@ -21,32 +21,32 @@
                         </p>
                     </a>
                 </li>
-                @if(Auth::user()->isAdmin())
-                    <li class="nav-item">
-                        <a href="{{ route('users') }}" class="nav-link {{ request()->is('users') ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-users"></i>
-                            <p>
-                                Users
-                            </p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('subscribers') }}" class="nav-link {{ request()->is('subscribers') ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-users-cog"></i>
-                            <p>
-                                Subscribers
-                            </p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('subscription_plan.index') }}" class="nav-link {{ request()->is('subscription_plan') ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-columns"></i>
-                            <p>
-                                Subscription Plan
-                            </p>
-                        </a>
-                    </li>
-                @else
+{{--                @if(Auth::user()->isAdmin())--}}
+{{--                    <li class="nav-item">--}}
+{{--                        <a href="{{ route('users') }}" class="nav-link {{ request()->is('users') ? 'active' : '' }}">--}}
+{{--                            <i class="nav-icon fas fa-users"></i>--}}
+{{--                            <p>--}}
+{{--                                Users--}}
+{{--                            </p>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                    <li class="nav-item">--}}
+{{--                        <a href="{{ route('subscribers') }}" class="nav-link {{ request()->is('subscribers') ? 'active' : '' }}">--}}
+{{--                            <i class="nav-icon fas fa-users-cog"></i>--}}
+{{--                            <p>--}}
+{{--                                Subscribers--}}
+{{--                            </p>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                    <li class="nav-item">--}}
+{{--                        <a href="{{ route('subscription_plan.index') }}" class="nav-link {{ request()->is('subscription_plan') ? 'active' : '' }}">--}}
+{{--                            <i class="nav-icon fas fa-columns"></i>--}}
+{{--                            <p>--}}
+{{--                                Subscription Plan--}}
+{{--                            </p>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                @else--}}
                     <li class="nav-item">
                         <a href="#" class="nav-link {{ request()->is('amazon/productList') ? 'active' : '' }}">
                             <i class="nav-icon fab fa-amazon"></i>
@@ -87,6 +87,14 @@
                             </p>
                         </a>
                     </li>
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.rating_review') }}" class="nav-link {{ request()->is('walmartOrders') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-shopping-cart"></i>
+                        <p>
+                            Walmart Rating & Review
+                        </p>
+                    </a>
+                </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link {{ request()->is('subscription') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-columns"></i>
@@ -95,7 +103,7 @@
                             </p>
                         </a>
                     </li>
-                @endif
+{{--                @endif--}}
                 <li class="nav-item">
                     <a href="{{ route('profile.setting') }}" class="nav-link {{ request()->is('profile/setting') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-cog"></i>

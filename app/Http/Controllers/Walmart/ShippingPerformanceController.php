@@ -42,7 +42,11 @@ class ShippingPerformanceController extends Controller
             $createdStartDates = $data_last['order_date'];
             $createdStartDate = Carbon::parse($createdStartDates)->addDay();
 //            $createdStartDate = date('Y-m-d' , time());
-            $response[] = Walmart::getItem($client_id, $secret ,$createdStartDate);
+
+            $token = Walmart::getToken($client_id, $secret);
+            $token = $token['access_token'];  // Token generated
+
+            $response[] = Walmart::getItemOrder($client_id, $secret, $token ,$createdStartDate);
 
             if ($response[0]) {
 
@@ -80,29 +84,8 @@ class ShippingPerformanceController extends Controller
             // End of IF Condition
             else{
 
-
                 echo "No Current Record in API ";
-//                $walmart_order_Detail = walmart_order_details::all();
-//
-//                foreach ($walmart_order_Detail as $orderDetail)
-//                {
-//                    $order_date = $orderDetail['order_date'];
-//                    $estimated_delivery_date = $orderDetail['estimatedDeliveryDate'];
-//                    $status = $orderDetail['status'];
-//
-//                    $startTimeStamp = strtotime($order_date);
-//                    $endTimeStamp = strtotime($estimated_delivery_date);
-//                    $timeDiff = abs($endTimeStamp - $startTimeStamp);
-//                    $numberOfDays = $timeDiff/86400;  // 86400 seconds in one day
-//                    $numberDays = intval($numberOfDays);
-//                    echo $numberDays."<br>";
-//
-//                     $todayDate = "2022-02-10";
-//
-//
-//
-//                }
-                // End of foreach loop
+
             }
             // End of else condition
         }
@@ -110,7 +93,10 @@ class ShippingPerformanceController extends Controller
         else
         {
 
-            $response[] = Walmart::getItem($client_id, $secret ,$createdStartDate = 0);
+            $token = Walmart::getToken($client_id, $secret);
+            $token = $token['access_token'];  // Token generated
+
+            $response[] = Walmart::getItemOrder($client_id, $secret , $token ,$createdStartDate = 0);
 
             if (count($response) > 0) {
 
@@ -151,41 +137,83 @@ class ShippingPerformanceController extends Controller
       }
     // End of function Shipping Performance
 
-    public function order_status_check(Request $request)
-    {
-        $client_id = $request->get('clientID');
-        $secret = $request->get('clientSecretID');
-
-        $walmart_order = walmart_order_details::all();
-        foreach ($walmart_order as $order_status_databaseTable)
+        public function order_status_check(Request $request)
         {
-//            $order_status_databaseTable['purchaseOrderId'];
-//            $status = $order_status_databaseTable['status'];
-//            $purchaseID = $order_status_databaseTable['purchaseOrderId'];
+            ini_set('max_execution_time', '700');
 
-            $order_purchade_id = "7870331028520";
+            $client_id = $request->get('clientID');
+            $secret = $request->get('clientSecretID');
 
-            $response[] = Walmart::getItem($client_id, $secret ,$order_purchade_id);
+            $order_status = '';
+            $actualShipDateTimes = '';
+            $carrierName = '';
 
-            if(!empty($response)) {
+            $walmart_order = walmart_order_details::where('status', '!=', 'Delivered')->get();
+            $token = Walmart::getToken($client_id, $secret);
+            $token = $token['access_token'];  // Token generated
 
-                $order_status_check = $response[0]['list']['elements']['order'][0]['orderLines']['orderLine'][0]['orderLineStatuses']['orderLineStatus'][0]['status'];
-                $purchaseID = $response[0]['list']['elements']['order'][0]['purchaseOrderId'];
 
-                if (!empty($purchaseID)) {
-                    $UpdateDetails = walmart_order_details::where('purchaseOrderId', '=', $purchaseID)->first();
-                    $UpdateDetails->status = "Delivered";
-                    $UpdateDetails->save();
-                    return "Order Status Updated";
-                }
+            foreach ($walmart_order as $order_status_databaseTable) {
+
+                    $order_purchade_id = $order_status_databaseTable['purchaseOrderId'];
+                    $response = Walmart::getItemAnOrder($client_id, $secret, $token, $order_purchade_id);
+                    $live_status = $response['order']['orderLines']['orderLine'][0]['orderLineStatuses']['orderLineStatus'][0]['status'];
+                   
+                    if($response['order']['orderLines']['orderLine'][0]['orderLineStatuses']['orderLineStatus'][0]['trackingInfo'] != null){
+                        $actualShipDateTime =  $response['order']['orderLines']['orderLine'][0]['orderLineStatuses']['orderLineStatus'][0]['trackingInfo']['shipDateTime'];
+                        $actualShipDateTimes = date("Y-m-d", substr($actualShipDateTime, 0, 10));
+
+                        $carrierName =  $response['order']['orderLines']['orderLine'][0]['orderLineStatuses']['orderLineStatus'][0]['trackingInfo']['carrierName']['carrier'];
+                    }
+                    if($live_status == 'Acknowledged'){
+                            $order_status = 'Acknowledged101';
+                            $query = walmart_order_details::where('purchaseOrderId', $order_purchade_id)
+                                                            ->update(['status' => $order_status]);
+                        }
+                        elseif($live_status == 'Created'){
+                            $order_status = 'Created101';
+                            $query = walmart_order_details::where('purchaseOrderId', $order_purchade_id)
+                                                            ->update(['status' => $order_status]);
+                        }
+                        elseif($live_status == 'Shipped'){
+                            $order_status = 'Shipped101';
+
+                            //  $estimatedShipDate = strtotime($order_status_databaseTable['estimatedShipDate']);
+                            //  $actualShipDate = strtotime($order_status_databaseTable['actualShipDate']);
+
+                            // if($actualShipDate < $estimatedShipDate)
+                            // {
+                            //     return "Excellent";
+                            // }
+                            // elseif($actualShipDate <= $estimatedShipDate)
+                            // {
+                            //     return "good";
+                            // }
+                            // elseif($actualShipDate > $estimatedShipDate)
+                            // {
+                            //     return "Poor";
+                            // }
+                            
+                            
+                            $query = walmart_order_details::where('purchaseOrderId', $order_purchade_id)
+                                                            ->update(['status' => $order_status , 
+                                                                      'actualShipDate' => $actualShipDateTimes,
+                                                                      'carrierName' => $carrierName]);
+                        }
+                        elseif($live_status == 'Delivered'){
+                            $order_status = 'Delivered101';
+                            $query = walmart_order_details::where('purchaseOrderId', $order_purchade_id)
+                                                            ->update(['status' => $order_status, 
+                                                                      'actualDeliveryDate' => date('Y-m-d')]);
+                        }
+                        
+              // End of if condition regarding created
             }
 
+
+            // End of foreach loop
         }
-        // End of foreach loop
-     }
     // End of order_status_check
-
-
 
 
 
