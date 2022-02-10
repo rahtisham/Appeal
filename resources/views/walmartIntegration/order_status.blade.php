@@ -9,6 +9,8 @@
     <section class="content">
         <div class="container-fluid">
             <h1 style="text-align: center">Order Status</h1><br><br>
+            <a style="text-align: center" href="{{ route('dashboard.ontime_shipping') }}" class="btn btn-warning">On Time Shipping</a>
+
             <div class="row">
                 <!-- /.col -->
                 <div class="col-md-1">

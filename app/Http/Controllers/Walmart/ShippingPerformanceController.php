@@ -7,8 +7,12 @@ use App\Integration\Walmart;
 use App\Product;
 use Illuminate\Http\Request;
 use App\walmart_order_details;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OnTimeShipping;
 use App\apiIntegrations;
 use Carbon\Carbon;
+use App\User;
+use App\walmart_OnTimeShip;
 use phpDocumentor\Reflection\Utils;
 
 class ShippingPerformanceController extends Controller
@@ -147,6 +151,7 @@ class ShippingPerformanceController extends Controller
             $order_status = '';
             $actualShipDateTimes = '';
             $carrierName = '';
+            $actualShippingStatus ='';
 
             $walmart_order = walmart_order_details::where('status', '!=', 'Delivered')->get();
             $token = Walmart::getToken($client_id, $secret);
@@ -154,6 +159,9 @@ class ShippingPerformanceController extends Controller
 
 
             foreach ($walmart_order as $order_status_databaseTable) {
+
+                    $estimatedShipDate = strtotime($order_status_databaseTable['estimatedShipDate']);
+                    $actualShipDate = strtotime($order_status_databaseTable['actualShipDate']);
 
                     $order_purchade_id = $order_status_databaseTable['purchaseOrderId'];
                     $response = Walmart::getItemAnOrder($client_id, $secret, $token, $order_purchade_id);
@@ -165,6 +173,20 @@ class ShippingPerformanceController extends Controller
 
                         $carrierName =  $response['order']['orderLines']['orderLine'][0]['orderLineStatuses']['orderLineStatus'][0]['trackingInfo']['carrierName']['carrier'];
                     }
+
+                    if($actualShipDate < $estimatedShipDate)
+                    {
+                        $actualShippingStatus = "Excellent";
+                    }
+                    elseif($actualShipDate == $estimatedShipDate)
+                    {
+                        $actualShippingStatus = "Good";
+                    }
+                    elseif($actualShipDate > $estimatedShipDate)
+                    {
+                        $actualShippingStatus = "Poor";
+                    } 
+
                     if($live_status == 'Acknowledged'){
                             $order_status = 'Acknowledged101';
                             $query = walmart_order_details::where('purchaseOrderId', $order_purchade_id)
@@ -176,29 +198,13 @@ class ShippingPerformanceController extends Controller
                                                             ->update(['status' => $order_status]);
                         }
                         elseif($live_status == 'Shipped'){
-                            $order_status = 'Shipped101';
-
-                            //  $estimatedShipDate = strtotime($order_status_databaseTable['estimatedShipDate']);
-                            //  $actualShipDate = strtotime($order_status_databaseTable['actualShipDate']);
-
-                            // if($actualShipDate < $estimatedShipDate)
-                            // {
-                            //     return "Excellent";
-                            // }
-                            // elseif($actualShipDate <= $estimatedShipDate)
-                            // {
-                            //     return "good";
-                            // }
-                            // elseif($actualShipDate > $estimatedShipDate)
-                            // {
-                            //     return "Poor";
-                            // }
-                            
-                            
+                            $order_status = 'Shipped101';  
+                           
                             $query = walmart_order_details::where('purchaseOrderId', $order_purchade_id)
                                                             ->update(['status' => $order_status , 
                                                                       'actualShipDate' => $actualShipDateTimes,
-                                                                      'carrierName' => $carrierName]);
+                                                                      'carrierName' => $carrierName,
+                                                                      'actualShipStatus' => $actualShippingStatus]);
                         }
                         elseif($live_status == 'Delivered'){
                             $order_status = 'Delivered101';
@@ -214,6 +220,74 @@ class ShippingPerformanceController extends Controller
             // End of foreach loop
         }
     // End of order_status_check
+
+    public function onTimeShipping()
+    {
+        
+
+        $last_shipment_date = walmart_order_details::select('actualShipDate')
+                                                    ->where('actualShipDate' , '!=' , null)
+                                                    ->latest('actualShipDate')
+                                                    ->first();
+                                                   
+        $to = $last_shipment_date['actualShipDate'];
+        $addDay= strtotime($last_shipment_date['actualShipDate'] . "-10 days"); 
+        $ten_days_ago_shipment_Date = date('Y-m-d', $addDay);
+
+
+        $reportShipment = walmart_order_details::whereBetween('actualShipDate', [$ten_days_ago_shipment_Date , $to])->get();
+
+       
+        if(count($reportShipment) > 0)
+        {
+            $report_generate = [];
+            foreach($reportShipment as $report)
+            {
+                $actaulshipDate = strtotime($report['actualShipDate']);
+                $estimatedShipDate = strtotime($report['estimatedShipDate']);
+
+                if($actaulshipDate < $estimatedShipDate)
+                {
+                    $actualShippingStatus = "Excellent";
+                }
+                elseif($actaulshipDate == $estimatedShipDate)
+                {
+                    $actualShippingStatus = "Good";
+                }
+                elseif($actaulshipDate > $estimatedShipDate)
+                {
+                    $actualShippingStatus = "Poor";
+                } 
+
+                $report_generate[] = [
+
+                    'order_id' => $report['user_id'],
+                    'actualShipDate' => $report['actualShipDate'],
+                    'estimatedShipDate' => $report['estimatedShipDate'],
+                    'email' => "ahtisham@amzonestep.com",
+                    'status' => $actualShippingStatus,
+                ];
+
+                $walmart_ontime_shiping = walmart_OnTimeShip::create([
+                    'order_id' => $report['user_id'],
+                    'actualShipDate' => $report['actualShipDate'],
+                    'estimatedShipDate' => $report['estimatedShipDate'],
+                    'status' => $actualShippingStatus,
+                ]);
+
+            }
+
+           Mail::to('ahtisham@amzonestep.com')->send(new OnTimeShipping($report_generate));
+          
+        }
+        else
+        {
+            echo "False";
+        }
+
+
+    
+    }
 
 
 

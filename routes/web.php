@@ -62,6 +62,7 @@ Route::group(['middleware' => 'auth'] , function(){
         Route::get('/shipping_performance' , [ShippingPerformanceController::class , 'index'])->name('dashboard.shipping_performance');
         Route::post('/shipping_performance_integration' , [ShippingPerformanceController::class , 'ShippingPerformance'])->name('dashboard.ShippingPerformance');
         Route::get('/walmart_order' , [WalmartOrdersController::class , 'walmart_orders'])->name('dashboard.walmart_order');
+        Route::get('/ontime_shipping' , [ShippingPerformanceController::class , 'onTimeShipping'])->name('dashboard.ontime_shipping');
 
     });
 
