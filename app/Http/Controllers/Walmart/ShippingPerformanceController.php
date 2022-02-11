@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\walmart_order_details;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OnTimeShipping;
+use App\Mail\OnTimeDelivery;
 use App\apiIntegrations;
 use Carbon\Carbon;
 use App\User;
@@ -216,7 +217,6 @@ class ShippingPerformanceController extends Controller
               // End of if condition regarding created
             }
 
-
             // End of foreach loop
         }
     // End of order_status_check
@@ -224,7 +224,6 @@ class ShippingPerformanceController extends Controller
     public function onTimeShipping()
     {
         
-
         $last_shipment_date = walmart_order_details::select('actualShipDate')
                                                     ->where('actualShipDate' , '!=' , null)
                                                     ->latest('actualShipDate')
@@ -280,15 +279,109 @@ class ShippingPerformanceController extends Controller
            Mail::to('ahtisham@amzonestep.com')->send(new OnTimeShipping($report_generate));
           
         }
-        else
+
+    } // End of onTimeShipping function
+
+
+    public function OntimeDelivered()
+    {
+        $last_delivery_date = walmart_order_details::select('actualDeliveryDate')
+                                                    ->where('actualDeliveryDate' , '!=' , null)
+                                                    ->latest('actualDeliveryDate')
+                                                    ->first();
+                                                   
+        $to = $last_delivery_date['actualDeliveryDate'];
+        $addDay= strtotime($last_delivery_date['actualDeliveryDate'] . "-10 days"); 
+        $ten_days_ago_delivery_Date = date('Y-m-d', $addDay);
+
+
+        $reportDelivery = walmart_order_details::whereBetween('actualDeliveryDate', [$ten_days_ago_delivery_Date , $to])->get();
+
+       
+        if(count($reportDelivery) > 0)
         {
-            echo "False";
+            $report_generate = [];
+            foreach($reportDelivery as $report)
+            {
+                $actualDeliveryDate = strtotime($report['actualDeliveryDate']);
+                $estimatedDeliveryDate = strtotime($report['estimatedDeliveryDate']);
+
+                if($actualDeliveryDate <= $estimatedDeliveryDate)
+                {
+                    $actualDeliveryStatus = "Excellent";
+                }
+                elseif($actualDeliveryDate == $estimatedDeliveryDate)
+                {
+                    $actualDeliveryStatus = "Good";
+                }
+                elseif($actualDeliveryDate > $estimatedDeliveryDate)
+                {
+                    $actualDeliveryStatus = "Poor";
+                }
+
+                $report_generate[] = [
+
+                    'order_id' => $report['user_id'],
+                    'actualDeliveryDate' => $report['actualDeliveryDate'],
+                    'estimatedDeliveryDate' => $report['estimatedDeliveryDate'],
+                    'email' => "ahtisham@amzonestep.com",
+                    'status' => $actualDeliveryStatus,
+                ];
+
+                // $walmart_ontime_shiping = walmart_OnTimeShip::create([
+                //     'order_id' => $report['user_id'],
+                //     'actualShipDate' => $report['actualShipDate'],
+                //     'estimatedShipDate' => $report['estimatedShipDate'],
+                //     'status' => $actualShippingStatus,
+                // ]);
+
+            }
+
+            Mail::to('ahtisham@amzonestep.com')->send(new OnTimeDelivery($report_generate));
+          
+        }
+    } // End of OntimeDelivered function
+
+
+    public function shippinig_performance()
+    {
+        $last_shipment_date = walmart_order_details::select('actualShipDate')
+                                                    ->where('actualShipDate' , '!=' , null)
+                                                    ->latest('actualShipDate')
+                                                    ->first();
+
+        $to = $last_shipment_date['actualShipDate'];
+        $addDay= strtotime($last_shipment_date['actualShipDate'] . "-10 days");
+        $ten_days_ago_shipment_Date = date('Y-m-d', $addDay);
+
+
+        $reportShipment = walmart_order_details::whereBetween('actualShipDate', [$ten_days_ago_shipment_Date , $to])->get();
+
+        if(count($reportShipment) > 0)
+        {
+            return $reportShipment;
+
         }
 
-
-    
     }
 
+
+    public function carrierPerformance()
+    {
+        $last_delivery_date = walmart_order_details::select('actualDeliveryDate')
+            ->where('actualDeliveryDate' , '!=' , null)
+            ->latest('actualDeliveryDate')
+            ->first();
+
+        $to = $last_delivery_date['actualDeliveryDate'];
+        $addDay= strtotime($last_delivery_date['actualDeliveryDate'] . "-10 days");
+        $ten_days_ago_delivery_Date = date('Y-m-d', $addDay);
+
+        $carriers = walmart_order_details::select('carrierName')->distinct()->get();
+        return $carriers;
+
+
+    }
 
 
     }

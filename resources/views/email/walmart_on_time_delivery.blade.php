@@ -51,7 +51,7 @@
                                             <!-- title -->
                                             <tr>
                                                 <td class="res-center" style="text-align: center; color: white; font-family: 'Raleway', Arial, Sans-serif; font-size: 36px; letter-spacing: 1.5px; word-break: break-word; font-weight: 800; padding-left: 1.5px;" data-color="M1 Title 1" data-size="M1 Title 1" data-max="36" data-min="16">
-                                                     ON TIME SHIPPING PERFORMANCE FROM APPEALLAB
+                                                    ON TIME DELIVERY PERFORMANCE FROM APPEALLAB
                                                 </td>
                                             </tr>
                                             <!-- title end -->
@@ -143,7 +143,7 @@
                     </tr>
                     </tbody>
                 </table>
-            @foreach($report_generate as $shipping)
+            @foreach($report_generate as $delivery)
                 <!-- ====== Module : Texts ====== -->
                     <table bgcolor="#F5F5F5" align="center" class="full selected-table" border="0" cellpadding="0" cellspacing="0" data-thumbnail="http://www.stampready.net/dashboard/editor/user_uploads/zip_uploads/2020/03/22/9jhlVUzudcB8NtbnMg67SvA5/StampReady/thumbnails/thumb-2.png" data-module="Module-2" data-bgcolor="M2 Bgcolor 1">
                         <tbody>
@@ -158,42 +158,42 @@
                                                 <tr>
                                                     <th scope="col">EMAIL</th>
                                                     <td style="text-align: left">
-                                                        {{ $shipping['email'] }}
+                                                        {{ $delivery['email'] }}
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="col">ORDER ID</th>
                                                     <td style="text-align: left">
-                                                        {{ $shipping['order_id'] }}
+                                                        {{ $delivery['order_id'] }}
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="col">ACTUAL SHIP DATE</th>
                                                     <td style="text-align: left">
-                                                        {{ $shipping['actualShipDate'] }}
+                                                        {{ $delivery['actualDeliveryDate'] }}
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="col">ESTIMATED SHIP DATE</th>
                                                     <td style="text-align: left">
-                                                        {{ $shipping['estimatedShipDate'] }}
+                                                        {{ $delivery['estimatedDeliveryDate'] }}
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <th scope="col">STATUS</th>
-                                                    
-                                                     <?php if($shipping['status'] == "Good") { ?>
-                                                        <td style="text-align: left; color: blue;"> {{ $shipping['status'] }} </td>
+
+                                                    <?php if($delivery['status'] == "Good") { ?>
+                                                    <td style="text-align: left; color: blue;"> {{ $delivery['status'] }} </td>
                                                     <?php } ?>
 
-                                                    <?php if($shipping['status'] == "Poor") { ?>
-                                                        <td style="text-align: left; color: red;"> {{ $shipping['status'] }} </td>
+                                                    <?php if($delivery['status'] == "Poor") { ?>
+                                                    <td style="text-align: left; color: red;"> {{ $delivery['status'] }} </td>
                                                     <?php } ?>
 
-                                                    <?php if($shipping['status'] == "Excellent") { ?>
-                                                        <td style="text-align: left; color: green;"> {{ $shipping['status'] }} </td>
+                                                    <?php if($delivery['status'] == "Excellent") { ?>
+                                                    <td style="text-align: left; color: green;"> {{ $delivery['status'] }} </td>
                                                     <?php } ?>
-                                                   
+
                                                 </tr>
                                                 </thead>
                                             </table>

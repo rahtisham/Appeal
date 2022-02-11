@@ -9,15 +9,24 @@
     <section class="content">
         <div class="container-fluid">
             <h1 style="text-align: center">Order Status</h1><br><br>
-            <a style="text-align: center" href="{{ route('dashboard.ontime_shipping') }}" class="btn btn-warning">On Time Shipping</a>
-
+           
             <div class="row">
                 <!-- /.col -->
+                 
                 <div class="col-md-1">
                 </div>
                 <!-- /.col -->
                 <!--end of col-sm-1-->
                 <div class="col-md-10 card p-4">
+  
+                    <a style="text-align: center" href="{{ route('dashboard.ontime_shipping') }}" class="btn btn-warning">On Time Shipping</a>
+                    <br>
+                    <a style="text-align: center" href="{{ route('dashboard.ontime_delivered') }}" class="btn btn-success">On Time Delivered</a>
+                    <br>
+                    <a style="text-align: center" href="{{ route('dashboard.shippinig_performance') }}" class="btn btn-danger">Shipping Performance</a>
+                    <br>
+                    <a style="text-align: center" href="{{ route('dashboard.carrierPerformance') }}" class="btn btn-primary">Carrier Performance</a>
+                    <br><br>
 
                     <div class="tab-pane " id="walmartsettings">
                         <form class="form-horizontal" method="post" action="{{ url('dashboard/order_status_check') }}">
