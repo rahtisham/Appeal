@@ -696,6 +696,8 @@ class ComposerStaticInitd352177f1c96288eb2d29595eaa68233
         'App\\Mail\\OnTimeShipping' => __DIR__ . '/../..' . '/app/Mail/OnTimeShipping.php',
         'App\\Mail\\RatingReview' => __DIR__ . '/../..' . '/app/Mail/RatingReview.php',
         'App\\Mail\\SendMail' => __DIR__ . '/../..' . '/app/Mail/SendMail.php',
+        'App\\Mail\\carrierPerformance' => __DIR__ . '/../..' . '/app/Mail/carrierPerformance.php',
+        'App\\Mail\\regionalPerformance' => __DIR__ . '/../..' . '/app/Mail/regionalPerformance.php',
         'App\\Order' => __DIR__ . '/../..' . '/app/Order.php',
         'App\\PaymentLogs' => __DIR__ . '/../..' . '/app/PaymentLogs.php',
         'App\\Product' => __DIR__ . '/../..' . '/app/Product.php',

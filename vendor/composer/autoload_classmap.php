@@ -61,6 +61,8 @@ return array(
     'App\\Mail\\OnTimeShipping' => $baseDir . '/app/Mail/OnTimeShipping.php',
     'App\\Mail\\RatingReview' => $baseDir . '/app/Mail/RatingReview.php',
     'App\\Mail\\SendMail' => $baseDir . '/app/Mail/SendMail.php',
+    'App\\Mail\\carrierPerformance' => $baseDir . '/app/Mail/carrierPerformance.php',
+    'App\\Mail\\regionalPerformance' => $baseDir . '/app/Mail/regionalPerformance.php',
     'App\\Order' => $baseDir . '/app/Order.php',
     'App\\PaymentLogs' => $baseDir . '/app/PaymentLogs.php',
     'App\\Product' => $baseDir . '/app/Product.php',
