@@ -64,8 +64,9 @@ Route::group(['middleware' => 'auth'] , function(){
         Route::get('/walmart_order' , [WalmartOrdersController::class , 'walmart_orders'])->name('dashboard.walmart_order');
         Route::get('/ontime_shipping' , [ShippingPerformanceController::class , 'onTimeShipping'])->name('dashboard.ontime_shipping');
         Route::get('/ontime_delivered' , [ShippingPerformanceController::class , 'OntimeDelivered'])->name('dashboard.ontime_delivered');
-        Route::get('/shippinig_performance' , [ShippingPerformanceController::class , 'shippinig_performance'])->name('dashboard.shippinig_performance');
         Route::get('/carrierPerformance' , [ShippingPerformanceController::class , 'carrierPerformance'])->name('dashboard.carrierPerformance');
+        Route::get('/shippinig_performance' , [ShippingPerformanceController::class , 'shippinig_performance'])->name('dashboard.shippinig_performance');
+        Route::get('/regional_performance' , [ShippingPerformanceController::class , 'regionalPerformance'])->name('dashboard.regional_performance');
 
     });
 

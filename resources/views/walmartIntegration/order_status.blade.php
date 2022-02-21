@@ -23,10 +23,12 @@
                     <br>
                     <a style="text-align: center" href="{{ route('dashboard.ontime_delivered') }}" class="btn btn-success">On Time Delivered</a>
                     <br>
+                    <a style="text-align: center" href="{{ route('dashboard.carrierPerformance') }}" class="btn btn-primary">Carrier Performance</a>
+                    <br>
                     <a style="text-align: center" href="{{ route('dashboard.shippinig_performance') }}" class="btn btn-danger">Shipping Performance</a>
                     <br>
-                    <a style="text-align: center" href="{{ route('dashboard.carrierPerformance') }}" class="btn btn-primary">Carrier Performance</a>
-                    <br><br>
+                    <a style="text-align: center" href="{{ route('dashboard.regional_performance') }}" class="btn btn-danger">Regional Performance</a>
+                    <br>
 
                     <div class="tab-pane " id="walmartsettings">
                         <form class="form-horizontal" method="post" action="{{ url('dashboard/order_status_check') }}">

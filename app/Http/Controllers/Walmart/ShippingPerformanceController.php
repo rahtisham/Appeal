@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Walmart;
 
 use App\Http\Controllers\Controller;
 use App\Integration\Walmart;
+use App\Mail\carrierPerformance;
 use App\Product;
 use Illuminate\Http\Request;
 use App\walmart_order_details;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\OnTimeShipping;
 use App\Mail\OnTimeDelivery;
 use App\apiIntegrations;
+use App\Mail\regionalPerformance;
 use Carbon\Carbon;
 use App\User;
 use App\walmart_OnTimeShip;
@@ -328,19 +330,91 @@ class ShippingPerformanceController extends Controller
                     'status' => $actualDeliveryStatus,
                 ];
 
-                // $walmart_ontime_shiping = walmart_OnTimeShip::create([
-                //     'order_id' => $report['user_id'],
-                //     'actualShipDate' => $report['actualShipDate'],
-                //     'estimatedShipDate' => $report['estimatedShipDate'],
-                //     'status' => $actualShippingStatus,
-                // ]);
-
             }
 
             Mail::to('ahtisham@amzonestep.com')->send(new OnTimeDelivery($report_generate));
           
         }
     } // End of OntimeDelivered function
+
+    public function carrierPerformance()
+    {
+        $last_delivery_date = walmart_order_details::select('order_date')
+                                                    ->where('order_date' , '!=' , null)
+                                                    ->latest('order_date')
+                                                    ->first();
+
+        $to = $last_delivery_date['order_date'];
+        $addDay= strtotime($last_delivery_date['order_date'] . "-10 days");
+        $ten_days_ago_delivery_Date = date('Y-m-d', $addDay);
+
+        $reportShipment = walmart_order_details::whereBetween('order_date', [$ten_days_ago_delivery_Date , $to])->get();
+        $total_number_of_row =  $reportShipment->count();
+
+        $carrierPer = [];
+
+        $carrierPerformance = walmart_order_details::select('carrierName')->distinct('carrierName')->whereBetween('order_date', [$ten_days_ago_delivery_Date , $to])->pluck('carrierName');
+        foreach($carrierPerformance as $carrier)
+        {
+            $number_of_carrier =  walmart_order_details::where('carrierName' , $carrier)->get()->count();
+
+            $obtained_mark = $number_of_carrier / $total_number_of_row;
+            $percentage = $obtained_mark * 100;
+
+            $carrierPer[$carrier] = [
+
+                'numberCarrier' => $number_of_carrier,
+                'email' => 'ahtisham@amzonestep.com',
+                'carrierName' => $carrier,
+                'percentage' => $percentage
+
+            ];
+
+        }
+
+          Mail::to('ahtisham@amzonestep.com')->send(new carrierPerformance($carrierPer));
+        echo "Sended Email";
+    }
+
+
+    public function regionalPerformance()
+    {
+        $last_delivery_date = walmart_order_details::select('order_date')
+                                                    ->where('order_date' , '!=' , null)
+                                                    ->latest('order_date')
+                                                    ->first();
+
+        $to = $last_delivery_date['order_date'];
+        $addDay= strtotime($last_delivery_date['order_date'] . "-10 days");
+        $ten_days_ago_delivery_Date = date('Y-m-d', $addDay);
+
+        $reportShipment = walmart_order_details::whereBetween('order_date', [$ten_days_ago_delivery_Date , $to])->get();
+        $total_number_of_row =  $reportShipment->count();
+
+        $regionalCity = [];
+
+        $cities = walmart_order_details::select('city')->distinct('city')->whereBetween('order_date', [$ten_days_ago_delivery_Date , $to])->pluck('city');
+        foreach($cities as $city)
+        {
+            $number_of_orders =  walmart_order_details::where('city' , $city)->get()->count();
+
+            $obtained_mark = $number_of_orders / $total_number_of_row;
+            $percentage = $obtained_mark * 100;
+
+            $regionalCity[$city] = [
+
+                'order' => $number_of_orders,
+                'email' => 'ahtisham@amzonestep.com',
+                'city' => $city,
+                'percentage' => $percentage
+
+            ];
+
+        }
+
+        Mail::to('ahtisham@amzonestep.com')->send(new regionalPerformance($regionalCity));
+
+    }
 
 
     public function shippinig_performance()
@@ -355,30 +429,7 @@ class ShippingPerformanceController extends Controller
         $ten_days_ago_shipment_Date = date('Y-m-d', $addDay);
 
 
-        $reportShipment = walmart_order_details::whereBetween('actualShipDate', [$ten_days_ago_shipment_Date , $to])->get();
-
-        if(count($reportShipment) > 0)
-        {
-            return $reportShipment;
-
-        }
-
-    }
-
-
-    public function carrierPerformance()
-    {
-        $last_delivery_date = walmart_order_details::select('actualDeliveryDate')
-            ->where('actualDeliveryDate' , '!=' , null)
-            ->latest('actualDeliveryDate')
-            ->first();
-
-        $to = $last_delivery_date['actualDeliveryDate'];
-        $addDay= strtotime($last_delivery_date['actualDeliveryDate'] . "-10 days");
-        $ten_days_ago_delivery_Date = date('Y-m-d', $addDay);
-
-        $carriers = walmart_order_details::select('carrierName')->distinct()->get();
-        return $carriers;
+        $shipping_performance = walmart_order_details::whereBetween('actualShipDate', [$ten_days_ago_shipment_Date , $to])->get();
 
 
     }

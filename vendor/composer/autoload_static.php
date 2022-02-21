@@ -692,6 +692,7 @@ class ComposerStaticInitd352177f1c96288eb2d29595eaa68233
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\MSKU' => __DIR__ . '/../..' . '/app/MSKU.php',
+        'App\\Mail\\OnTimeDelivery' => __DIR__ . '/../..' . '/app/Mail/OnTimeDelivery.php',
         'App\\Mail\\OnTimeShipping' => __DIR__ . '/../..' . '/app/Mail/OnTimeShipping.php',
         'App\\Mail\\RatingReview' => __DIR__ . '/../..' . '/app/Mail/RatingReview.php',
         'App\\Mail\\SendMail' => __DIR__ . '/../..' . '/app/Mail/SendMail.php',
