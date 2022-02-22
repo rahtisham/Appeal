@@ -18,17 +18,26 @@
                 <!-- /.col -->
                 <!--end of col-sm-1-->
                 <div class="col-md-10 card p-4">
-  
-                    <a style="text-align: center" href="{{ route('dashboard.ontime_shipping') }}" class="btn btn-warning">On Time Shipping</a>
-                    <br>
-                    <a style="text-align: center" href="{{ route('dashboard.ontime_delivered') }}" class="btn btn-success">On Time Delivered</a>
-                    <br>
-                    <a style="text-align: center" href="{{ route('dashboard.carrierPerformance') }}" class="btn btn-primary">Carrier Performance</a>
-                    <br>
-                    <a style="text-align: center" href="{{ route('dashboard.shippinig_performance') }}" class="btn btn-danger">Shipping Performance</a>
-                    <br>
-                    <a style="text-align: center" href="{{ route('dashboard.regional_performance') }}" class="btn btn-danger">Regional Performance</a>
-                    <br>
+
+                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                            <a style="text-align: center" href="{{ route('dashboard.ontime_shipping') }}" class="btn btn-warning">On Time Shipping</a>
+                        </div>
+                        <div class="btn-group mr-2" role="group" aria-label="Second group">
+                            <a style="text-align: center" href="{{ route('dashboard.ontime_delivered') }}" class="btn btn-success">On Time Delivered</a>
+                        </div>
+                        <div class="btn-group mr-2" role="group" aria-label="Second group">
+                            <a style="text-align: center" href="{{ route('dashboard.carrierPerformance') }}" class="btn btn-primary">Carrier Performance</a>
+                        </div>
+                        <div class="btn-group mr-2" role="group" aria-label="Second group">
+                            <a style="text-align: center" href="{{ route('dashboard.shippinig_performance') }}" class="btn btn-danger">Shipping Performance</a>
+                        </div>
+                        <div class="btn-group mr-2" role="group" aria-label="Second group">
+                            <a style="text-align: center" href="{{ route('dashboard.regional_performance') }}" class="btn btn-light">Regional Performance</a>
+                        </div>
+                      </div>
+
+                      <br><br>
 
                     <div class="tab-pane " id="walmartsettings">
                         <form class="form-horizontal" method="post" action="{{ url('dashboard/order_status_check') }}">
